@@ -1,3 +1,4 @@
+import re
 # Products available in the store by category
 products = {
     "IT Products": [
@@ -29,7 +30,6 @@ products = {
         ("Snacks", 8)
     ]
 }
-
 
 def display_sorted_products(products_list, sort_order):
     return sorted(products_list, key=lambda x: x[1], reverse=(sort_order == "desc"))
@@ -128,7 +128,6 @@ def main():
                     print("Invalid option, please choose again.")
         else:
             print("Invalid category selection, please try again.")
-    
 
 """ The following block makes sure that the main() function is called when the program is run. 
 It also checks that this is the module that's being run directly, and not being used as a module in some other program. 
