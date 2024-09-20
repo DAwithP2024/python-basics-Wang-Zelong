@@ -32,7 +32,10 @@ products = {
 }
 
 def display_sorted_products(products_list, sort_order):
-    return sorted(products_list, key=lambda x: x[1], reverse=(sort_order == "desc"))
+    if sort_order == "asc":
+        return sorted(products_list, key=lambda x: x[1])
+    else:
+        return sorted(products_list, key=lambda x: x[1], reverse=True)
 
 def display_products(products_list):
     for index, (product, price) in enumerate(products_list, 1):
@@ -41,6 +44,7 @@ def display_products(products_list):
 def display_categories():
     for index, category in enumerate(products.keys(), 1):
         print(f"{index}. {category}")
+    return list(products.keys())[0]  # Return the first category as default
 
 def add_to_cart(cart, product, quantity):
     cart.append((product, quantity))
@@ -73,7 +77,7 @@ def validate_email(email):
     return "@" in email
 
 def main():
-    cart = []
+cart = []
     name = input("Please enter your name: ")
     while not validate_name(name):
         print("Invalid name. Please enter a valid name with first and last name.")
@@ -105,7 +109,7 @@ def main():
                         print("Invalid product or quantity, please try again.")
                 elif choice == "2":
                     sort_order = input("Sort ascending (1) or descending (2): ").lower()
-                    sorted_products = display_sorted_products(products[category], sort_order)
+                    sorted_products = display_sorted_products(products[category], "asc" if sort_order == "1" else "desc")
                     display_products(sorted_products)
                 elif choice == "3":
                     break
