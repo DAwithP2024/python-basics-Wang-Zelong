@@ -47,15 +47,19 @@ def display_categories():
     for index, category in enumerate(products.keys(), start=1):
         print(f"{index}. {category}")
 
-def add_to_cart(cart, product, quantity):
-    cart.append((product, quantity))
+def add_to_cart(cart, product, quantity, category):
+    cart.append((product, quantity, category))
 
 def display_cart(cart):
     output = StringIO()
     total_cost = 0
-    for product, price, quantity in cart:
-        total_cost += price * quantity
-        output.write(f"{product} - ${price} x {quantity} = ${price * quantity}\n")
+    for product, quantity, category in cart:
+        price = next((price for prod, price in products[category] if prod == product), None)
+        if price:
+            total_cost += price * quantity
+            output.write(f"{product} - ${price} x {quantity} = ${price * quantity}\n")
+        else:
+            output.write(f"{product} - Price not found\n")
     output.write(f"Total cost: ${total_cost}")
     return output.getvalue()
 
@@ -63,8 +67,12 @@ def generate_receipt(name, email, cart, total_cost, address):
     print(f"Customer: {name}")
     print(f"Email: {email}")
     print("Items Purchased:")
-    for product, price, quantity in cart:
-        print(f"{quantity} x {product} - ${price} = ${price * quantity}")
+    for product, quantity, category in cart:
+        price = next((price for prod, price in products[category] if prod == product), None)
+        if price:
+            print(f"{quantity} x {product} - ${price} = ${price * quantity}")
+        else:
+            print(f"{quantity} x {product} - Price not found")
     print(f"Total: ${total_cost}")
     print(f"Delivery Address: {address}")
     print("Your items will be delivered in 3 days. Payment will be accepted after successful delivery.")
@@ -75,7 +83,6 @@ def validate_name(name):
 def validate_email(email):
     return "@" in email
 
-# This function is not used in the tests, but it's part of the original code
 def main():
     cart = []
     name = input("Please enter your name: ")
@@ -104,7 +111,8 @@ def main():
                     product_choice = input("Enter the product number: ")
                     quantity = input("Enter the quantity: ")
                     if product_choice.isdigit() and int(product_choice) in range(1, len(products[category]) + 1) and quantity.isdigit() and int(quantity) > 0:
-                        add_to_cart(cart, products[category][int(product_choice) - 1], int(quantity))
+                        product = products[category][int(product_choice) - 1][0]
+                        add_to_cart(cart, product, int(quantity), category)
                     else:
                         print("Invalid product or quantity, please try again.")
                 elif choice == "2":
@@ -115,9 +123,10 @@ def main():
                     break
                 elif choice == "4":
                     if cart:
-                        total_cost = sum(price * quantity for product, price, quantity in cart)
+                        total_cost = sum(quantity * next((price for prod, price in products[category] if prod == product), None) for product, quantity, category in cart)
                         address = input("Please enter your delivery address: ")
                         generate_receipt(name, email, cart, total_cost, address)
+                        print(display_cart(cart))
                     else:
                         print("Thank you for using our portal. Hope you buy something from us next time. Have a nice day.")
                     continue_shopping = input("Do you want to continue shopping? (1 for yes, 2 for no): ")
