@@ -1,4 +1,5 @@
 import re
+from io import StringIO
 # Products available in the store by category
 products = {
     "IT Products": [
@@ -44,7 +45,7 @@ def display_products(products_list):
 def display_categories():
     for index, category in enumerate(products.keys(), 1):
         print(f"{index}. {category}")
-    return list(products.keys())[0]  # Return the first category as default
+    return 0  # Return the index of the first category
 
 def add_to_cart(cart, product, quantity):
     cart.append((product, quantity))
