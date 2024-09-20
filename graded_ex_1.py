@@ -54,10 +54,11 @@ def display_cart(cart):
     output = StringIO()
     total_cost = 0
     for product, quantity, category in cart:
-        price = next((price for prod, price in products[category] if prod == product), None)
-        if price:
-            total_cost += price * quantity
-            output.write(f"{product} - ${price} x {quantity} = ${price * quantity}\n")
+        for prod, price in products[category]:
+            if prod == product:
+                total_cost += price * quantity
+                output.write(f"{product} - ${price} x {quantity} = ${price * quantity}\n")
+                break
         else:
             output.write(f"{product} - Price not found\n")
     output.write(f"Total cost: ${total_cost}\n")
@@ -69,9 +70,10 @@ def generate_receipt(name, email, cart, total_cost, address):
     print(f"Email: {email}")
     print("Items Purchased:")
     for product, quantity, category in cart:
-        price = next((price for prod, price in products[category] if prod == product), None)
-        if price:
-            print(f"{quantity} x {product} - ${price} = ${price * quantity}")
+        for prod, price in products[category]:
+            if prod == product:
+                print(f"{quantity} x {product} - ${price} = ${price * quantity}")
+                break
         else:
             print(f"{quantity} x {product} - Price not found")
     print(f"Total: ${total_cost}")
