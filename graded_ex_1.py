@@ -77,7 +77,7 @@ def validate_email(email):
     return "@" in email
 
 def main():
-cart = []
+    cart = []
     name = input("Please enter your name: ")
     while not validate_name(name):
         print("Invalid name. Please enter a valid name with first and last name.")
