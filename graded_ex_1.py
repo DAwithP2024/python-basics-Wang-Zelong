@@ -61,7 +61,8 @@ def display_cart(cart):
         else:
             output.write(f"{product} - Price not found\n")
     output.write(f"Total cost: ${total_cost}\n")
-    return output.getvalue()
+    print(output.getvalue())
+    return total_cost
 
 def generate_receipt(name, email, cart, total_cost, address):
     print(f"Customer: {name}")
