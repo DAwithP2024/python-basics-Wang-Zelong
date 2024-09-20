@@ -124,7 +124,6 @@ def main():
                     break
                 elif choice == "4":
                     if cart:
-                        display_cart(cart)
                         total_cost = display_cart(cart)
                         address = input("Please enter your delivery address: ")
                         generate_receipt(name, email, cart, total_cost, address)
