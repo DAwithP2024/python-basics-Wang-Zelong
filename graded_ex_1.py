@@ -60,8 +60,9 @@ def display_cart(cart):
             output.write(f"{product} - ${price} x {quantity} = ${price * quantity}\n")
         else:
             output.write(f"{product} - Price not found\n")
-    output.write(f"Total cost: ${total_cost}")
-    return output.getvalue()
+    output.write(f"Total cost: ${total_cost}\n")
+    print(output.getvalue())
+    return total_cost
 
 def generate_receipt(name, email, cart, total_cost, address):
     print(f"Customer: {name}")
@@ -123,10 +124,10 @@ def main():
                     break
                 elif choice == "4":
                     if cart:
-                        total_cost = sum(quantity * next((price for prod, price in products[category] if prod == product), None) for product, quantity, category in cart)
+                        display_cart(cart)
+                        total_cost = display_cart(cart)
                         address = input("Please enter your delivery address: ")
                         generate_receipt(name, email, cart, total_cost, address)
-                        print(display_cart(cart))
                     else:
                         print("Thank you for using our portal. Hope you buy something from us next time. Have a nice day.")
                     continue_shopping = input("Do you want to continue shopping? (1 for yes, 2 for no): ")
